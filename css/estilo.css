@@ -1,0 +1,389 @@
+:root {
+  --cor-principal: #1d6031;      /* verde institucional */
+  --cor-principal-clara: #e6f0ea; /* verde muito claro para fundos */
+  --cor-borda: #c8d5cc;          /* borda neutra suave */
+  --cor-texto: #1d6031;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #feffff; /* fundo geral suave */
+}
+
+/* Layout geral: sidebar + mapa */
+#app {
+  display: flex;
+  height: 100vh;
+}
+
+/* Container da logo */
+#logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* Estilo da logo */
+#logo-webgis {
+  max-width: 80%;        /* evita ficar grande demais */
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+
+/* SIDEBAR */
+#sidebar {
+  width: 320px;
+  min-width: 280px;
+  max-width: 380px;
+  background: var(--cor-principal-clara);
+  border-right: 1px solid var(--cor-borda);
+  padding: 12px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+#sidebar h2 {
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: var(--cor-principal);
+  border-bottom: 2px solid var(--cor-borda);
+  padding-bottom: 6px;
+  font-weight: 700;
+}
+
+.divider {
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(to right, var(--cor-borda), #d9e3dd, var(--cor-borda));
+  margin: 10px 0;
+  opacity: 0.9;
+}
+
+.filtros {
+  margin-bottom: 12px;
+}
+
+.filtros label,
+.busca label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: var(--cor-principal);
+  font-weight: 600;
+}
+
+.filtros select,
+.busca input {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
+.filtros select:focus,
+.busca input:focus {
+  outline: none;
+  border-color: var(--cor-principal);
+  box-shadow: 0 0 0 2px rgba(29, 96, 49, 0.25);
+}
+
+.busca {
+  margin-bottom: 12px;
+}
+
+.busca label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.busca input {
+  width: 100%;
+  padding: 4px 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+/*Contadores*/
+.resumo-status {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #c6dccf;   /* ← tom mais carregado */
+  border: 1px solid #a6bfae;
+}
+
+.resumo-status label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: var(--cor-principal);
+}
+
+.resumo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  border: 1px solid var(--cor-borda);
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.resumo-item {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.resumo-item.a-iniciar {
+  border: 2px solid #3498db;
+}
+
+.resumo-label {
+  color: #444;
+}
+
+.resumo-valor {
+  font-weight: bold;
+  min-width: 24px;
+  text-align: right;
+}
+
+/* Se quiser diferenciar por cor: */
+#contador-aprovado {
+  color: #2ecc71;
+}
+
+#contador-em-analise {
+  color: #f1c40f;
+}
+
+#contador-pendente {
+  color: #e67e22;
+}
+
+#contador-a-iniciar {
+  color: #3498db;
+}
+
+
+/* Lista de licenças */
+#lista-licencas {
+  margin-top: 8px;
+}
+
+.item-licenca {
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.item-licenca:hover {
+  background: #eef5ff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+}
+
+.item-licenca-titulo {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.item-licenca-processo {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.item-licenca-tipo {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.item-licenca-status {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.item-licenca-validade {
+  font-size: 12px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Cores conforme situação da validade */
+.item-licenca-validade.ok {
+  color: #1e8449; /* verde */
+}
+
+.item-licenca-validade.proxima {
+  color: #e67e22; /* laranja */
+}
+
+.item-licenca-validade.expirada {
+  color: #e74c3c; /* vermelho */
+}
+
+.item-licenca-validade.sem {
+  color: #666666; /* cinza */
+}
+
+/* MAPA */
+#mapa {
+  width: 100%;
+  height: 100%;
+  position: relative;  /* se quiser usar overlays depois */
+}
+
+/* CAIXA DO NORTE */
+.north-arrow {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+  display: inline-flex;
+  flex-direction: column; /* permite a seta ficar em cima do texto */
+  align-items: center;
+  justify-content: center;
+  gap: 2px; /* espaço entre seta e o N */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  margin-bottom: 8px;
+}
+
+/* SETA PARA CIMA — NOSSA, PERSONALIZADA */
+.north-arrow::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid #333; /* seta preta para cima */
+}
+
+/* REMOVER O TRIÂNGULO AUTOMÁTICO PARA BAIXO DO LEAFLET */
+.leaflet-control:after {
+  content: none !important;
+}
+
+#mapa-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: 8px;
+
+  /* 🔧 antes: height: 100vh; */
+  height: 100%;
+  min-height: 0; /* importante em flex pra não “estourar” */
+}
+
+#mapa {
+  flex: 1;
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+}
+
+/* Caixa pequena para coordenadas, logo abaixo do mapa */
+#coordenadas-mapa {
+  margin-top: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  white-space: nowrap;   /* não quebra linha */
+}
+
+
+/* Opcional: seta apontando para cima */
+.north-arrow::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  margin-top: 18px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 8px solid #333;
+}
+
+/* Popup mais legível */
+.popup-titulo {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.popup-label {
+  font-weight: bold;
+}
+
+.popup-valor {
+  margin-bottom: 2px;
+}
+
+/* Legendinha no canto */
+.legenda {
+  background: rgba(255, 255, 255, 0.884);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.legenda-cor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  border: 1px solid #333;
+}
+
+/* Responsivo: em telas muito pequenas, sidebar some pra não atrapalhar */
+@media (max-width: 768px) {
+  #sidebar {
+    display: none;
+  }
+}
+
+/* Correção para não distorcer os tiles do Leaflet */
+.leaflet-container img {
+  max-width: none !important;
+}
