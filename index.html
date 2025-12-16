@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebGIS - Licenças Ambientais</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <link rel="stylesheet" href="css/estilo.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+      <div id="logo-container">
+        <img src="img/logo.png" alt="Logo" id="logo-webgis">
+      </div>
+
+      <div class="divider"></div>  <!-- LINHA 1 -->
+
+      <h2>Controle de Licenças - SEINFRA</h2>
+
+      <div class="filtros">
+        <label for="filtro-status">Filtrar por status:</label>
+        <select id="filtro-status">
+          <option value="todos">Todos</option>
+          <option value="Aprovado">Aprovado</option>
+          <option value="Em Análise">Em análise</option>
+          <option value="Pendente de documentação">Pendente de documentação</option>
+          <option value="A Iniciar">A Iniciar</option>
+        </select>
+      </div>
+    
+      <div class="busca">
+       <label for="busca-processo">Buscar por processo:</label>
+       <input
+          id="busca-processo"
+          type="text"
+          placeholder="Digite o nº do processo..."
+        />
+      </div>
+
+      <div class="busca">
+        <label for="busca-empreendimento">Buscar por empreendimento:</label>
+        <input
+          id="busca-empreendimento"
+          type="text"
+          placeholder="Digite o nome do empreendimento..."
+        />
+      </div>
+
+
+      <div class="divider"></div>  <!-- LINHA 3 -->
+
+      <div id="resumo-status" class="resumo-status">
+        <label for="filtro-status">Quadro resumo:</label>
+        <div class="resumo-item">
+          <span class="resumo-label">Aprovadas</span>
+          <span id="contador-aprovado" class="resumo-valor">0</span>
+        </div>
+        <div class="resumo-item">
+          <span class="resumo-label">Em análise</span>
+          <span id="contador-em-analise" class="resumo-valor">0</span>
+        </div>
+        <div class="resumo-item">
+          <span class="resumo-label">Pendente de documentação</span>
+          <span id="contador-pendente" class="resumo-valor">0</span>
+        </div>
+        <div class="resumo-item">
+          <span class="resumo-label">A iniciar</span>
+          <span id="contador-a-iniciar" class="resumo-valor">0</span>
+        </div>
+      </div>
+
+    <div class="divider"></div>  <!-- LINHA 4 -->
+
+      <div id="lista-licencas">
+        <!-- Itens serão preenchidos via JavaScript -->
+      </div>
+    </div>
+
+    <!-- MAPA -->
+    <div id="mapa-container">
+      <div id="mapa"></div>
+      <div id="coordenadas-mapa">Passe o mouse sobre o mapa para ver as coordenadas</div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script src="js/mapa.js"></script>
+</body>
+</html>
