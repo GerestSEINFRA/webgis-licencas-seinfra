@@ -417,7 +417,7 @@ function atualizarMapaELista() {
       var statusNorm = status.toLowerCase();
       if (statusNorm.includes("aprov")) {
         contAprovado++;
-      } else if (statusNorm.includes("em análise") || statusNorm.includes("em analise")) {
+      } else if (statusNorm.includes("em análise - SEFIC","em análise - AMMA", "em análise - SEMAD-GO") || statusNorm.includes("em análise - SEFIC","em análise - AMMA", "em análise - SEMAD-GO")) {
         contEmAnalise++;
       } else if (statusNorm.includes("iniciar")) {
         contAIniciar++;
@@ -525,4 +525,5 @@ function adicionarLegenda() {
   };
 
   legenda.addTo(mapa);
+
 }
