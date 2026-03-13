@@ -2,7 +2,7 @@
   --cor-principal: #1d6031;      /* verde institucional */
   --cor-principal-clara: #e6f0ea; /* verde muito claro para fundos */
   --cor-borda: #c8d5cc;          /* borda neutra suave */
-  --cor-texto: #1d6031;
+  --cor-texto: #ee6a26;
 }
 
 html,
@@ -386,4 +386,5 @@ body {
 /* Correção para não distorcer os tiles do Leaflet */
 .leaflet-container img {
   max-width: none !important;
+
 }
