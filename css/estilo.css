@@ -442,8 +442,7 @@ body {
 #creditos-painel {
   position: absolute;
   bottom: 8px;
-  left: 83%;
-  transform: translateX(-50%);
+  right: 10px;
   z-index: 900;
 
   background: rgba(255, 255, 255, 0.92);
