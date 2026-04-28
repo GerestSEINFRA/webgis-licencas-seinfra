@@ -442,7 +442,7 @@ body {
 #creditos-painel {
   position: absolute;
   bottom: 8px;
-  left: 50%;
+  left: 83%;
   transform: translateX(-50%);
   z-index: 900;
 
