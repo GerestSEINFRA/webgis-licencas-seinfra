@@ -1,6 +1,7 @@
 // ============================
 // VARIÁVEIS GLOBAIS
 // ============================
+var graficoStatus = null;
 var mapa;
 var camadaPedidos;
 var featuresData = []; // Armazena { feature, layer } para controle de filtro/lista
@@ -52,7 +53,11 @@ var googleHybrid = L.tileLayer(
 );
 
 // Grupo onde ficarão os pontos
-camadaPedidos = L.layerGroup().addTo(mapa);
+camadaPedidos = L.markerClusterGroup({
+  showCoverageOnHover: false,
+  spiderfyOnMaxZoom: true,
+  disableClusteringAtZoom: 18
+}).addTo(mapa);
 
 // Controle de camadas
 var baseMaps = {
@@ -76,7 +81,7 @@ mapa.on("baselayerchange", function () {
 
 // Estilos conforme solicitado
 var estiloBairros = {
-  color: "#FFA500",   // cinza escuro
+  color: "#FFA500",   // laranja
   weight: 2,
   opacity: 1
 };
@@ -135,7 +140,7 @@ L.control.scale({
 // Rosa dos ventos (somente Norte) no canto superior direito
 var northControl = L.control({ position: "bottomleft" });
 
-northControl.onAdd = function (map) {
+northControl.onAdd = function () {
   var div = L.DomUtil.create("div", "north-arrow");
   div.innerHTML = "N";
   return div;
@@ -180,6 +185,7 @@ function corPorStatus(status) {
 // ============================
 
 var filtroStatusEl = document.getElementById("filtro-status");
+var filtroValidadeEl = document.getElementById("filtro-validade");
 var buscaProcessoEl = document.getElementById("busca-processo");
 var listaLicencasEl = document.getElementById("lista-licencas");
 var buscaEmpreendimentoEl = document.getElementById("busca-empreendimento");
@@ -219,10 +225,8 @@ fetch("dados/pedidos_licenca.geojson")
         var emp = p.empreendimento || "Não informado";
         var finalidade = p.finalidade || "Não informada";
         var loc = p.localizacao || "Não informada";
-        var validade = p.validade || "Não informado";
         var status = p.status || "Não informado";
         var validade = p.validade || "";
-        var classeValPopup = classeValidade(validade);
         var textoValidade = validade || "Não informada";
         var pdfLicenca = p.pdf_licenca; // pode ser null
         var pdfParecer = p.pdf_parecer // pode ser null
@@ -351,6 +355,7 @@ function normalizaTexto(t) {
 
 function atualizarMapaELista() {
   var statusSelecionado = filtroStatusEl ? filtroStatusEl.value : "todos";
+  var validadeSelecionada = filtroValidadeEl ? filtroValidadeEl.value : "todos";
   var termoBuscaBruto = buscaProcessoEl
     ? buscaProcessoEl.value.trim()
     : "";
@@ -373,7 +378,7 @@ function atualizarMapaELista() {
   var contPendente = 0;
   var contAIniciar = 0;
 
-  featuresData.forEach(function (item, index) {
+  featuresData.forEach(function (item) {
     var feature = item.feature;
     var layer = item.layer;
     var p = feature.properties || {};
@@ -410,6 +415,45 @@ function atualizarMapaELista() {
       }
     }
 
+    // 4) Filtro por validade
+    if (inclui && validadeSelecionada !== "todos") {
+      var validade = p.validade || "";
+      var dtVal = parseDataBR(validade);
+
+      var hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+
+      if (!dtVal) {
+        if (validadeSelecionada !== "sem-data") {
+          inclui = false;
+        }
+      } else {
+        dtVal.setHours(0, 0, 0, 0);
+
+        var difMs = dtVal - hoje;
+        var difDias = difMs / (1000 * 60 * 60 * 24);
+
+        if (validadeSelecionada === "vencidas" && difDias >= 0) {
+          inclui = false;
+        }
+
+        if (validadeSelecionada === "vigentes" && difDias < 0) {
+          inclui = false;
+        }
+
+        if (validadeSelecionada === "30dias" && (difDias < 0 || difDias > 30)) {
+          inclui = false;
+        }
+
+        if (validadeSelecionada === "90dias" && (difDias < 0 || difDias > 90)) {
+          inclui = false;
+        }
+
+        if (validadeSelecionada === "sem-data") {
+          inclui = false;
+        }
+      }
+    }
 
     if (inclui) {
 
@@ -417,7 +461,7 @@ function atualizarMapaELista() {
       var statusNorm = status.toLowerCase();
       if (statusNorm.includes("aprov")) {
         contAprovado++;
-      } else if (statusNorm.includes("em análise") || statusNorm.includes("em análise")) {
+      } else if (statusNorm.includes("em análise")) {
         contEmAnalise++;
       } else if (statusNorm.includes("iniciar")) {
         contAIniciar++;
@@ -481,6 +525,13 @@ function atualizarMapaELista() {
   if (elEmAnalise) elEmAnalise.textContent = contEmAnalise;
   if (elAIniciar)  elAIniciar.textContent  = contAIniciar;
   if (elPendente) elPendente.textContent = contPendente;
+
+  atualizarDashboard(
+    contAprovado,
+    contEmAnalise,
+    contPendente,
+    contAIniciar
+  ); 
 }
 
 // Evento de mudança no filtro de status ou por processo
@@ -495,6 +546,10 @@ if (buscaProcessoEl) {
 
 if (buscaEmpreendimentoEl) {
   buscaEmpreendimentoEl.addEventListener("input", atualizarMapaELista);
+}
+
+if (filtroValidadeEl) {
+  filtroValidadeEl.addEventListener("change", atualizarMapaELista);
 }
 
 // ============================
@@ -528,3 +583,85 @@ function adicionarLegenda() {
 
 }
 
+// ============================
+// SIDEBAR RETRÁTIL
+// ============================
+
+var toggleSidebarBtn = document.getElementById("toggle-sidebar");
+var appEl = document.getElementById("app");
+
+if (toggleSidebarBtn && appEl) {
+  toggleSidebarBtn.addEventListener("click", function () {
+    appEl.classList.toggle("sidebar-recolhida");
+
+    setTimeout(function () {
+      mapa.invalidateSize();
+    }, 300);
+  });
+}
+
+// ============================
+// DASHBOARD
+// ============================
+
+function atualizarDashboard(aprovado, analise, pendente, iniciar) {
+  var ctx = document.getElementById("grafico-status");
+
+  if (!ctx) return;
+
+  if (graficoStatus) {
+    graficoStatus.destroy();
+  }
+
+  graficoStatus = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Aprovado", "Em análise", "Pendente", "A iniciar"],
+      datasets: [{
+        label: "Quantidade",
+        data: [aprovado, analise, pendente, iniciar],
+        backgroundColor: [
+          "#2ecc71",
+          "#f1c40f",
+          "#e67e22",
+          "#3498db"
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+}
+
+// ============================
+// ACCORDION SIDEBAR
+// ============================
+
+var botoesSecao = document.querySelectorAll(".secao-titulo");
+
+botoesSecao.forEach(function(botao) {
+  botao.addEventListener("click", function () {
+    var conteudo = botao.nextElementSibling;
+
+    conteudo.classList.toggle("aberto");
+
+    var aberto = conteudo.classList.contains("aberto");
+
+    botao.innerHTML = botao.textContent.replace(/[▾▸]/g, "").trim() + (aberto ? " ▾" : " ▸");
+  });
+});
