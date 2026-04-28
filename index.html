@@ -12,6 +12,16 @@
     crossorigin=""
   />
 
+  <!-- Marker Cluster CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+  />
   <link rel="stylesheet" href="css/estilo.css" />
 </head>
 <body>
@@ -24,72 +34,118 @@
 
       <div class="divider"></div>  <!-- LINHA 1 -->
 
-      <h2>Controle de Licenças - SEINFRA</h2>
+      <h2>Gestão de Licenças - SEINFRA</h2>
 
-      <div class="filtros">
-        <label for="filtro-status">Filtrar por status:</label>
-        <select id="filtro-status">
-          <option value="todos">Todos</option>
-          <option value="Aprovado">Aprovado</option>
-          <option value="Em Análise">Em análise</option>
-          <option value="Pendente de documentação">Pendente de documentação</option>
-          <option value="A Iniciar">A Iniciar</option>
-        </select>
-      </div>
-    
-      <div class="busca">
-       <label for="busca-processo">Buscar por processo:</label>
-       <input
-          id="busca-processo"
-          type="text"
-          placeholder="Digite o nº do processo..."
-        />
-      </div>
+      <div class="secao-box">
+        <button class="secao-titulo ativo">Filtros ▾</button>
+        
+        <div class="secao-conteudo aberto">
+          <div class="filtros">
+            <label for="filtro-status">Filtrar por status:</label>
+            <select id="filtro-status">
+              <option value="todos">Todos</option>
+              <option value="Aprovado">Aprovado</option>
+              <option value="Em Análise">Em análise</option>
+              <option value="Pendente de documentação">Pendente de documentação</option>
+              <option value="A Iniciar">A Iniciar</option>
+            </select>
+          </div>
+          
+          <div class="filtros">
+            <label for="filtro-validade">Filtrar por validade:</label>
+            <select id="filtro-validade">
+              <option value="todos">Todas</option>
+              <option value="vigentes">Vigentes</option>
+              <option value="vencidas">Vencidas</option>
+              <option value="30dias">Vencem em até 30 dias</option>
+              <option value="90dias">Vencem em até 90 dias</option>
+              <option value="sem-data">Sem data de validade</option>
+            </select>
+          </div>
 
-      <div class="busca">
-        <label for="busca-empreendimento">Buscar por empreendimento:</label>
-        <input
-          id="busca-empreendimento"
-          type="text"
-          placeholder="Digite o nome do empreendimento..."
-        />
-      </div>
+          <div class="busca">
+          <label for="busca-processo">Buscar por processo:</label>
+          <input
+              id="busca-processo"
+              type="text"
+              placeholder="Digite o nº do processo..."
+            />
+          </div>
 
+          <div class="busca">
+            <label for="busca-empreendimento">Buscar por empreendimento:</label>
+            <input
+              id="busca-empreendimento"
+              type="text"
+              placeholder="Digite o nome do empreendimento..."
+            />
+          </div>
+        </div>
+      </div>
 
       <div class="divider"></div>  <!-- LINHA 3 -->
 
-      <div id="resumo-status" class="resumo-status">
-        <label for="filtro-status">Quadro resumo:</label>
-        <div class="resumo-item">
-          <span class="resumo-label">Aprovadas</span>
-          <span id="contador-aprovado" class="resumo-valor">0</span>
-        </div>
-        <div class="resumo-item">
-          <span class="resumo-label">Em análise</span>
-          <span id="contador-em-analise" class="resumo-valor">0</span>
-        </div>
-        <div class="resumo-item">
-          <span class="resumo-label">Pendente de documentação</span>
-          <span id="contador-pendente" class="resumo-valor">0</span>
-        </div>
-        <div class="resumo-item">
-          <span class="resumo-label">A iniciar</span>
-          <span id="contador-a-iniciar" class="resumo-valor">0</span>
+      <div class="secao-box">
+        <button class="secao-titulo">Quadro Resumo ▸</button>
+
+        <div class="secao-conteudo">
+          <div id="resumo-status" class="resumo-status">
+            <label>Quadro resumo:</label>
+            <div class="resumo-item">
+              <span class="resumo-label">Aprovadas</span>
+              <span id="contador-aprovado" class="resumo-valor">0</span>
+            </div>
+            <div class="resumo-item">
+              <span class="resumo-label">Em análise</span>
+              <span id="contador-em-analise" class="resumo-valor">0</span>
+            </div>
+            <div class="resumo-item">
+              <span class="resumo-label">Pendente de documentação</span>
+              <span id="contador-pendente" class="resumo-valor">0</span>
+            </div>
+            <div class="resumo-item">
+              <span class="resumo-label">A iniciar</span>
+              <span id="contador-a-iniciar" class="resumo-valor">0</span>
+            </div>
+          </div>
         </div>
       </div>
+      
+    <div class="divider"></div>
 
-    <div class="divider"></div>  <!-- LINHA 4 -->
+    <div class="secao-box">
+      <button class="secao-titulo">Dashboard ▸</button>
 
-      <div id="lista-licencas">
-        <!-- Itens serão preenchidos via JavaScript -->
+      <div class="secao-conteudo">
+        <div id="dashboard-box" class="dashboard-box">
+          <label>Dashboard</label>
+          <canvas id="grafico-status"></canvas>
+        </div>
       </div>
     </div>
+    
+    <div class="divider"></div>  <!-- LINHA 4 -->
+    
+    <div class="secao-box">
+      <button class="secao-titulo ativo">Licenças ▾</button>
+
+      <div class="secao-conteudo aberto">
+        <div id="lista-licencas">
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- MAPA -->
     <div id="mapa-container">
+      <button id="toggle-sidebar" title="Mostrar/ocultar painel">
+      ☰
+      </button>
+
       <div id="mapa"></div>
-      <div id="coordenadas-mapa">Passe o mouse sobre o mapa para ver as coordenadas</div>
-    </div>
+      <div id="creditos-painel">
+        <strong>Painel elaborado por:</strong> Gerência de Estudos e Projetos (GEREST/SEINFRA) - <strong>Versão 1.1</strong>
+      </div>
   </div>
 
   <!-- Leaflet JS -->
@@ -99,6 +155,9 @@
     crossorigin=""
   ></script>
 
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/mapa.js"></script>
+
 </body>
 </html>
