@@ -2,7 +2,6 @@
   --cor-principal: #1d6031;      /* verde institucional */
   --cor-principal-clara: #e6f0ea; /* verde muito claro para fundos */
   --cor-borda: #c8d5cc;          /* borda neutra suave */
-  --cor-texto: #ee6a26;
 }
 
 html,
@@ -102,19 +101,6 @@ body {
   margin-bottom: 12px;
 }
 
-.busca label {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.busca input {
-  width: 100%;
-  padding: 4px 6px;
-  font-size: 13px;
-  box-sizing: border-box;
-}
-
 /*Contadores*/
 .resumo-status {
   display: grid;
@@ -144,13 +130,6 @@ body {
   padding: 6px 8px;
   border-radius: 4px;
   background: #ffffff;
-}
-
-.resumo-item {
-  border: 1px solid #ccc;
-  padding: 6px 8px;
-  border-radius: 4px;
-  background: #fff;
 }
 
 .resumo-item.a-iniciar {
@@ -251,13 +230,6 @@ body {
   color: #666666; /* cinza */
 }
 
-/* MAPA */
-#mapa {
-  width: 100%;
-  height: 100%;
-  position: relative;  /* se quiser usar overlays depois */
-}
-
 /* CAIXA DO NORTE */
 .north-arrow {
   background: rgba(255, 255, 255, 0.9);
@@ -299,8 +271,6 @@ body {
   justify-content: flex-start;
   box-sizing: border-box;
   padding: 8px;
-
-  /* 🔧 antes: height: 100vh; */
   height: 100%;
   min-height: 0; /* importante em flex pra não “estourar” */
 }
@@ -323,19 +293,6 @@ body {
   color: #333;
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   white-space: nowrap;   /* não quebra linha */
-}
-
-
-/* Opcional: seta apontando para cima */
-.north-arrow::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  margin-top: 18px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 8px solid #333;
 }
 
 /* Popup mais legível */
@@ -386,5 +343,116 @@ body {
 /* Correção para não distorcer os tiles do Leaflet */
 .leaflet-container img {
   max-width: none !important;
+}
 
+/* ===== BOTÃO SIDEBAR RETRÁTIL ===== */
+#toggle-sidebar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 6px;
+  background: var(--cor-principal);
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+#toggle-sidebar:hover {
+  background: #154823;
+}
+
+/* Estado recolhido da sidebar */
+#app.sidebar-recolhida #sidebar {
+  display: none;
+}
+
+/* Ajuste para o mapa continuar ocupando tudo */
+#mapa-container {
+  position: relative;
+}
+
+/* Reposiciona controle de zoom para baixo */
+.leaflet-top.leaflet-left .leaflet-control-zoom {
+  margin-top: 65px;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard-box {
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid var(--cor-borda);
+}
+
+.dashboard-box label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--cor-principal);
+}
+
+#grafico-status {
+  max-height: 220px;
+}
+
+/* ===== ACCORDION SIDEBAR ===== */
+
+.secao-box {
+  margin-bottom: 10px;
+}
+
+.secao-titulo {
+  width: 100%;
+  border: none;
+  background: var(--cor-principal);
+  color: #fff;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.secao-titulo:hover {
+  background: #154823;
+}
+
+.secao-conteudo {
+  display: none;
+  padding-top: 8px;
+}
+
+.secao-conteudo.aberto {
+  display: block;
+}
+
+/* ===== CRÉDITOS DO PAINEL ===== */
+#creditos-painel {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+
+  background: rgba(255, 255, 255, 0.92);
+  color: #333;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  white-space: nowrap;
 }
